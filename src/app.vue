@@ -1,13 +1,26 @@
 <template>
   <div id="app">
     <multipane class="custom-resizer" layout="vertical">
-      <paner>
+      <paner :style="{ width: '30%' }">
         <div class="pane pane1">第一个面板</div>
       </paner>
       <resizer></resizer>
-      <paner>
+      <paner :style="{ width: '30%' }">
         <div class="pane pane2">第二个面板</div>
       </paner>
+      <resizer></resizer>
+      <paner :style="{ width: '40%' }">
+        <div class="pane pane3">第三个面板</div>
+      </paner>
+      <!-- <multipane class="custom-resizer" layout="horizontal">
+        <paner :style="{ height: '50%' }">
+          <div class="pane pane1">第三个面板</div>
+        </paner>
+        <resizer></resizer>
+        <paner :style="{ height: '50%' }">
+          <div class="pane pane2">第四个面板</div>
+        </paner>
+      </multipane> -->
     </multipane>
   </div>
 </template>
@@ -25,6 +38,8 @@ html,
 body,
 #app {
   height: 100%;
+  width: 100%;
+  overflow: auto;
 }
 body {
   overflow: hidden;
