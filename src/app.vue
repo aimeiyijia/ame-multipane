@@ -11,11 +11,11 @@
       <resizer></resizer>
       <paner :style="{ width: '40%' }">
         <multipane class="custom-resizer" layout="horizontal">
-          <paner :style="{ height: '50%' }">
+          <paner :style="{ height: '40%' }">
             <div class="pane pane3">垂直第一个面板</div>
           </paner>
           <resizer></resizer>
-          <paner :style="{ height: '50%' }">
+          <paner :style="{ height: '60%' }">
             <div class="pane pane4">垂直第二个面板</div>
           </paner>
         </multipane>

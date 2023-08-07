@@ -126,11 +126,8 @@ export default class extends Vue {
     }
   }
 
-  onMouseDown({
-    target: resizer,
-    pageX: initialPageX,
-    pageY: initialPageY
-  }: MouseEvent) {
+  onMouseDown(e: MouseEvent) {
+    const { target: resizer, pageX: initialPageX, pageY: initialPageY } = e
     if (
       resizer &&
       resizer instanceof HTMLElement &&
@@ -152,7 +149,7 @@ export default class extends Vue {
       let prePaneUsePercentage = !!(prePane.style.width + '').match('%')
       let nextPaneUsePercentage = !!(nextPane.style.width + '').match('%')
 
-      const { addEventListener, removeEventListener } = window
+      console.log(resizer, '触发元素')
 
       const resize = (offset = 0): any => {
         // 水平
@@ -175,15 +172,27 @@ export default class extends Vue {
           nextPane.style.left = left + 10 + width + 'px'
         }
         // 垂直
-        // if (layout == LAYOUT_HORIZONTAL) {
-        //   let containerHeight = container.clientHeight
-        //   let paneHeight = initialSize + offset
+        if (layout == LAYOUT_HORIZONTAL) {
+          let containerHeight = container.clientHeight
+          let initPrePaneHeight = prePaneHeight + offset
+          let initNextPaneHeight = nextPaneHeight - offset
 
-        //   return (prePane.style.height = prePaneUsePercentage
-        //     ? (paneHeight / containerHeight) * 100 + '%'
-        //     : paneHeight + 'px')
-        // }
+          prePane.style.height = prePaneUsePercentage
+            ? (initPrePaneHeight / containerHeight) * 100 + '%'
+            : initPrePaneHeight - 5 + 'px'
+
+          const { top, height } = prePane.getBoundingClientRect()
+          resizer.style.top = top + height + 'px'
+
+          nextPane.style.height = nextPaneUsePercentage
+            ? (initNextPaneHeight / containerHeight) * 100 + '%'
+            : initNextPaneHeight - 5 + 'px'
+
+          nextPane.style.top = top + 10 + height + 'px'
+        }
       }
+
+      const { addEventListener, removeEventListener } = window
 
       // This adds is-resizing class to container
       self.isResizing = true
@@ -194,16 +203,19 @@ export default class extends Vue {
       // Trigger paneResizeStart event
       self.$emit('paneResizeStart', prePane, resizer, size)
 
-      const onMouseMove = ({ pageX, pageY }: MouseEvent) => {
+      const onMouseMove = (e: MouseEvent) => {
+        const { pageX, pageY } = e
         size =
           layout == LAYOUT_VERTICAL
             ? resize(pageX - initialPageX)
             : resize(pageY - initialPageY)
 
         self.$emit('paneResize', prePane, resizer, nextPane, size)
+        e.stopPropagation()
       }
 
-      const onMouseUp = () => {
+      const onMouseUp = (e: MouseEvent) => {
+        const { pageX, pageY } = e
         // Run resize one more time to set computed width/height.
         // size = layout == LAYOUT_VERTICAL ? resize() : resize()
 
@@ -218,6 +230,8 @@ export default class extends Vue {
 
       addEventListener('mousemove', onMouseMove)
       addEventListener('mouseup', onMouseUp)
+
+      e.stopPropagation()
     }
   }
 
