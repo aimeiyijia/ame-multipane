@@ -146,8 +146,12 @@ export default class extends Vue {
       let { offsetWidth: nextPaneWidth, offsetHeight: nextPaneHeight } =
         nextPane
 
-      let prePaneUsePercentage = !!(prePane.style.width + '').match('%')
-      let nextPaneUsePercentage = !!(nextPane.style.width + '').match('%')
+      let prePaneWidthUsePercentage = !!(prePane.style.width + '').match('%')
+      let prePaneHeightUsePercentage = !!(prePane.style.height + '').match('%')
+      let nextPaneWidthUsePercentage = !!(nextPane.style.width + '').match('%')
+      let nextPaneHeightUsePercentage = !!(nextPane.style.height + '').match(
+        '%'
+      )
 
       console.log(resizer, '触发元素')
 
@@ -158,16 +162,16 @@ export default class extends Vue {
           let initPrePaneWidth = prePaneWidth + offset
           let initNextPaneWidth = nextPaneWidth - offset
 
-          prePane.style.width = prePaneUsePercentage
+          prePane.style.width = prePaneWidthUsePercentage
             ? (initPrePaneWidth / containerWidth) * 100 + '%'
-            : initPrePaneWidth - 5 + 'px'
+            : initPrePaneWidth + 'px'
 
           const { left, width } = prePane.getBoundingClientRect()
           resizer.style.left = left + width + 'px'
 
-          nextPane.style.width = nextPaneUsePercentage
+          nextPane.style.width = nextPaneWidthUsePercentage
             ? (initNextPaneWidth / containerWidth) * 100 + '%'
-            : initNextPaneWidth - 5 + 'px'
+            : initNextPaneWidth + 'px'
 
           nextPane.style.left = left + 10 + width + 'px'
         }
@@ -177,16 +181,16 @@ export default class extends Vue {
           let initPrePaneHeight = prePaneHeight + offset
           let initNextPaneHeight = nextPaneHeight - offset
 
-          prePane.style.height = prePaneUsePercentage
+          prePane.style.height = prePaneHeightUsePercentage
             ? (initPrePaneHeight / containerHeight) * 100 + '%'
-            : initPrePaneHeight - 5 + 'px'
+            : initPrePaneHeight + 'px'
 
           const { top, height } = prePane.getBoundingClientRect()
           resizer.style.top = top + height + 'px'
 
-          nextPane.style.height = nextPaneUsePercentage
+          nextPane.style.height = nextPaneHeightUsePercentage
             ? (initNextPaneHeight / containerHeight) * 100 + '%'
-            : initNextPaneHeight - 5 + 'px'
+            : initNextPaneHeight + 'px'
 
           nextPane.style.top = top + 10 + height + 'px'
         }
