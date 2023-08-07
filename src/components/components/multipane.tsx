@@ -1,5 +1,6 @@
 import { Vue, Component, Prop, Emit } from 'vue-property-decorator'
 import { VNode, CreateElement } from 'vue'
+import { generateUUID } from '../utils/uuid'
 import '../styles/index.scss'
 const LAYOUT_HORIZONTAL = 'horizontal'
 const LAYOUT_VERTICAL = 'vertical'
@@ -29,6 +30,11 @@ export default class extends Vue {
     return this.isResizing ? 'none' : ''
   }
 
+  setElId() {
+    const id = 'multipane' + generateUUID()
+    this.$el.id = id
+  }
+
   getChildPanerElements(el: HTMLElement) {
     let panerEls: HTMLElement[] = []
     let childs = el.children
@@ -45,31 +51,77 @@ export default class extends Vue {
   }
 
   initLayout() {
-    const panerEls = document.querySelectorAll('.multipane-paner')
+    const el = this.$el
+    // 先将整体的布局完成（确定paner元素的位置）
+    const panerEls = document.querySelectorAll(`#${el.id} > .multipane-paner`)
     for (const key in panerEls) {
       if (Object.prototype.hasOwnProperty.call(panerEls, key)) {
         const element = panerEls[key] as HTMLElement
-
-        let resizer = element.previousElementSibling as HTMLElement
-        console.log(element, 'element')
-        if (resizer) {
-          const resizerWidth = resizer.offsetWidth
-          let prePane = resizer.previousElementSibling as HTMLElement
-          prePane.style.width = `calc(${prePane.style.width} - 5px)`
-          const { left, width } = prePane.getBoundingClientRect()
-          element.style.width = `calc(${element.style.width} - 5px)`
-          element.style.left = left + width + 10 + 'px'
+        // 是否水平
+        let isV = true
+        if (element.parentElement?.classList.contains('layout-h')) {
+          isV = false
+        }
+        let leftResizer = element.previousElementSibling as HTMLElement
+        let rightResizer = element.nextElementSibling as HTMLElement
+        if (leftResizer && rightResizer) {
+          if (isV) {
+            element.style.width = `calc(${element.style.width} - 10px)`
+          } else {
+            element.style.height = `calc(${element.style.height} - 10px)`
+          }
+        } else {
+          if (isV) {
+            element.style.width = `calc(${element.style.width} - 5px)`
+          } else {
+            element.style.height = `calc(${element.style.height} - 5px)`
+          }
+        }
+        if (leftResizer) {
+          let prePane = leftResizer.previousElementSibling as HTMLElement
+          if (isV) {
+            const { left, width } = prePane.getBoundingClientRect()
+            element.style.left = left + width + 10 + 'px'
+          } else {
+            const { top, height } = prePane.getBoundingClientRect()
+            element.style.top = top + height + 10 + 'px'
+          }
         }
       }
     }
 
-    const resizerEls = document.querySelectorAll('.multipane-resizer')
+    // 确定resizer与paner的位置
+    const resizerEls = document.querySelectorAll(
+      `#${el.id} > .multipane-resizer`
+    )
     for (const key in resizerEls) {
       if (Object.prototype.hasOwnProperty.call(resizerEls, key)) {
         const element = resizerEls[key] as HTMLElement
+        let isV = true
+        if (element.parentElement?.classList.contains('layout-h')) {
+          isV = false
+        }
         let prePane = element.previousElementSibling as HTMLElement
-        const { left, width } = prePane.getBoundingClientRect()
-        element.style.left = left + width + 'px'
+        let nextPane = element.nextElementSibling as HTMLElement
+        // prePane.style.width = `calc(${prePane.style.width} - 5px)`
+        // nextPane.style.width = `calc(${nextPane.style.width} - 5px)`
+        if (prePane && !nextPane) {
+          console.log('只有左paner的分割线')
+        }
+        if (prePane && nextPane) {
+          console.log('中间的分割线')
+        }
+        if (!prePane && nextPane) {
+          console.log('只有右paner的分割线')
+        }
+
+        if (isV) {
+          const { left, width } = prePane.getBoundingClientRect()
+          element.style.left = left + width + 'px'
+        } else {
+          const { top, height } = prePane.getBoundingClientRect()
+          element.style.top = top + height + 'px'
+        }
       }
     }
   }
@@ -102,7 +154,7 @@ export default class extends Vue {
 
       const { addEventListener, removeEventListener } = window
 
-      const resize = (initialSize: number = 0, offset = 0): any => {
+      const resize = (offset = 0): any => {
         // 水平
         if (layout == LAYOUT_VERTICAL) {
           let containerWidth = container.clientWidth
@@ -145,8 +197,8 @@ export default class extends Vue {
       const onMouseMove = ({ pageX, pageY }: MouseEvent) => {
         size =
           layout == LAYOUT_VERTICAL
-            ? resize(prePaneWidth, pageX - initialPageX)
-            : resize(prePaneHeight, pageY - initialPageY)
+            ? resize(pageX - initialPageX)
+            : resize(pageY - initialPageY)
 
         self.$emit('paneResize', prePane, resizer, nextPane, size)
       }
@@ -170,9 +222,8 @@ export default class extends Vue {
   }
 
   mounted() {
-    this.$nextTick(() => {
-      this.initLayout()
-    })
+    this.setElId()
+    this.initLayout()
   }
 
   render(h: CreateElement): VNode {

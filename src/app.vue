@@ -10,17 +10,16 @@
       </paner>
       <resizer></resizer>
       <paner :style="{ width: '40%' }">
-        <div class="pane pane3">第三个面板</div>
+        <multipane class="custom-resizer" layout="horizontal">
+          <paner :style="{ height: '50%' }">
+            <div class="pane pane3">垂直第一个面板</div>
+          </paner>
+          <resizer></resizer>
+          <paner :style="{ height: '50%' }">
+            <div class="pane pane4">垂直第二个面板</div>
+          </paner>
+        </multipane>
       </paner>
-      <!-- <multipane class="custom-resizer" layout="horizontal">
-        <paner :style="{ height: '50%' }">
-          <div class="pane pane1">第三个面板</div>
-        </paner>
-        <resizer></resizer>
-        <paner :style="{ height: '50%' }">
-          <div class="pane pane2">第四个面板</div>
-        </paner>
-      </multipane> -->
     </multipane>
   </div>
 </template>
@@ -52,6 +51,8 @@ body {
 }
 .pane {
   font-size: 36px;
+  width: 100%;
+  height: 100%;
 }
 .pane1 {
   background-color: aquamarine;
@@ -61,5 +62,8 @@ body {
 }
 .pane3 {
   background-color: chocolate;
+}
+.pane4 {
+  background-color: rgb(148, 196, 255);
 }
 </style>
