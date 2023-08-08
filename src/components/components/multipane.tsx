@@ -30,6 +30,10 @@ export default class extends Vue {
     return this.isResizing ? 'none' : ''
   }
 
+  setResizeListener() {
+    window.addEventListener('resize', () => this.initLayout(true))
+  }
+
   setElId() {
     const id = 'multipane' + generateUUID()
     this.$el.id = id
@@ -50,7 +54,7 @@ export default class extends Vue {
     return panerEls
   }
 
-  initLayout() {
+  initLayout(resize: boolean) {
     const el = this.$el
     // 先将整体的布局完成（确定paner元素的位置）
     const panerEls = document.querySelectorAll(`#${el.id} > .multipane-paner`)
@@ -64,19 +68,23 @@ export default class extends Vue {
         }
         let leftResizer = element.previousElementSibling as HTMLElement
         let rightResizer = element.nextElementSibling as HTMLElement
-        if (leftResizer && rightResizer) {
-          if (isV) {
-            element.style.width = `calc(${element.style.width} - 10px)`
+        if (!resize) {
+          // 两条分割线
+          if (leftResizer && rightResizer) {
+            if (isV) {
+              element.style.width = `calc(${element.style.width} - 10px)`
+            } else {
+              element.style.height = `calc(${element.style.height} - 10px)`
+            }
           } else {
-            element.style.height = `calc(${element.style.height} - 10px)`
-          }
-        } else {
-          if (isV) {
-            element.style.width = `calc(${element.style.width} - 5px)`
-          } else {
-            element.style.height = `calc(${element.style.height} - 5px)`
+            if (isV) {
+              element.style.width = `calc(${element.style.width} - 5px)`
+            } else {
+              element.style.height = `calc(${element.style.height} - 5px)`
+            }
           }
         }
+
         if (leftResizer) {
           let prePane = leftResizer.previousElementSibling as HTMLElement
           if (isV) {
@@ -105,21 +113,22 @@ export default class extends Vue {
         let nextPane = element.nextElementSibling as HTMLElement
         // prePane.style.width = `calc(${prePane.style.width} - 5px)`
         // nextPane.style.width = `calc(${nextPane.style.width} - 5px)`
-        if (prePane && !nextPane) {
-          console.log('只有左paner的分割线')
-        }
-        if (prePane && nextPane) {
-          console.log('中间的分割线')
-        }
-        if (!prePane && nextPane) {
-          console.log('只有右paner的分割线')
-        }
+        // if (prePane && !nextPane) {
+        //   console.log('只有左paner的分割线')
+        // }
+        // if (prePane && nextPane) {
+        //   console.log('中间的分割线')
+        // }
+        // if (!prePane && nextPane) {
+        //   console.log('只有右paner的分割线')
+        // }
 
         if (isV) {
           const { left, width } = prePane.getBoundingClientRect()
           element.style.left = left + width + 'px'
         } else {
           const { top, height } = prePane.getBoundingClientRect()
+          console.log(prePane.offsetHeight)
           element.style.top = top + height + 'px'
         }
       }
@@ -241,7 +250,11 @@ export default class extends Vue {
 
   mounted() {
     this.setElId()
-    this.initLayout()
+    this.setResizeListener()
+    this.initLayout(false)
+  }
+  beforeDestory() {
+    window.removeEventListener('resize', () => this.initLayout(true))
   }
 
   render(h: CreateElement): VNode {
