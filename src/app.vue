@@ -4,17 +4,17 @@
       <paner :style="{ width: '30%' }">
         <div class="pane pane1">第一个面板</div>
       </paner>
-      <resizer></resizer>
+      <resizer opera="left"></resizer>
       <paner :style="{ width: '30%' }">
         <div class="pane pane2">第二个面板</div>
       </paner>
-      <resizer></resizer>
+      <resizer opera="right"></resizer>
       <paner :style="{ width: '40%' }">
         <multipane class="custom-resizer" layout="horizontal">
           <paner :style="{ height: '40%' }">
             <div class="pane pane3">垂直第一个面板</div>
           </paner>
-          <resizer></resizer>
+          <resizer opera="left"></resizer>
           <paner :style="{ height: '60%' }">
             <div class="pane pane4">垂直第二个面板</div>
           </paner>
@@ -53,7 +53,7 @@ body {
   width: 100%;
   height: 100%;
 }
-.pane1 {
+/* .pane1 {
   background-color: aquamarine;
 }
 .pane2 {
@@ -64,5 +64,5 @@ body {
 }
 .pane4 {
   background-color: rgb(148, 196, 255);
-}
+} */
 </style>

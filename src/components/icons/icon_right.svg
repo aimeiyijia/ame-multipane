@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="10px" height="32px" viewBox="0 0 10 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon_右1</title>
+    <g id="TDH图标" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="编组-8" transform="translate(-323.000000, -114.000000)">
+            <g id="icon_右1" transform="translate(328.000000, 130.000000) rotate(-180.000000) translate(-328.000000, -130.000000) translate(323.000000, 114.000000)">
+                <path d="M0,0 L8.825,4.27878788 C9.55595367,4.63319065 10,5.25470947 10,5.92339394 L10,26.0766061 C10,26.7452905 9.55595367,27.3668094 8.825,27.7212121 L0,32 L0,0 Z" id="Rectangle-27" fill="#989AAA" fill-rule="nonzero"></path>
+                <polygon id="三角形" fill="#FFFFFF" transform="translate(4.583333, 16.000000) rotate(-90.000000) translate(-4.583333, -16.000000) " points="4.58333333 13.9166667 8.58333333 18.0833333 0.583333333 18.0833333"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

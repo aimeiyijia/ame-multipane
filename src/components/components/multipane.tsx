@@ -1,5 +1,6 @@
 import { Vue, Component, Prop, Emit } from 'vue-property-decorator'
 import { VNode, CreateElement } from 'vue'
+import EventBus from '../utils/eventBus'
 import { generateUUID } from '../utils/uuid'
 import '../styles/index.scss'
 const LAYOUT_HORIZONTAL = 'horizontal'
@@ -9,6 +10,7 @@ const LAYOUT_VERTICAL = 'vertical'
 })
 export default class extends Vue {
   @Prop({ default: LAYOUT_VERTICAL }) private readonly layout!: string
+  @Prop({ default: 1.5 }) private readonly resizerWidth!: number
 
   isResizing = false
 
@@ -72,15 +74,19 @@ export default class extends Vue {
           // 两条分割线
           if (leftResizer && rightResizer) {
             if (isV) {
-              element.style.width = `calc(${element.style.width} - 10px)`
+              element.style.width = `calc(${element.style.width} -  ${
+                this.resizerWidth * 2
+              }px)`
             } else {
-              element.style.height = `calc(${element.style.height} - 10px)`
+              element.style.height = `calc(${element.style.height} - ${
+                this.resizerWidth * 2
+              }px)`
             }
           } else {
             if (isV) {
-              element.style.width = `calc(${element.style.width} - 5px)`
+              element.style.width = `calc(${element.style.width} - ${this.resizerWidth}px)`
             } else {
-              element.style.height = `calc(${element.style.height} - 5px)`
+              element.style.height = `calc(${element.style.height} - ${this.resizerWidth}px)`
             }
           }
         }
@@ -89,10 +95,10 @@ export default class extends Vue {
           let prePane = leftResizer.previousElementSibling as HTMLElement
           if (isV) {
             const { left, width } = prePane.getBoundingClientRect()
-            element.style.left = left + width + 10 + 'px'
+            element.style.left = left + width + this.resizerWidth * 2 + 'px'
           } else {
             const { top, height } = prePane.getBoundingClientRect()
-            element.style.top = top + height + 10 + 'px'
+            element.style.top = top + height + this.resizerWidth * 2 + 'px'
           }
         }
       }
@@ -122,7 +128,6 @@ export default class extends Vue {
         // if (!prePane && nextPane) {
         //   console.log('只有右paner的分割线')
         // }
-
         if (isV) {
           const { left, width } = prePane.getBoundingClientRect()
           element.style.left = left + width + 'px'
@@ -182,7 +187,7 @@ export default class extends Vue {
             ? (initNextPaneWidth / containerWidth) * 100 + '%'
             : initNextPaneWidth + 'px'
 
-          nextPane.style.left = left + 10 + width + 'px'
+          nextPane.style.left = left + this.resizerWidth * 2 + width + 'px'
         }
         // 垂直
         if (layout == LAYOUT_HORIZONTAL) {
@@ -201,7 +206,7 @@ export default class extends Vue {
             ? (initNextPaneHeight / containerHeight) * 100 + '%'
             : initNextPaneHeight + 'px'
 
-          nextPane.style.top = top + 10 + height + 'px'
+          nextPane.style.top = top + this.resizerWidth * 2 + height + 'px'
         }
       }
 
@@ -252,6 +257,57 @@ export default class extends Vue {
     this.setElId()
     this.setResizeListener()
     this.initLayout(false)
+    EventBus.$off('fold-pane')
+    EventBus.$on('fold-pane', (resizer: HTMLElement, direction: string) => {
+      console.log(direction, '折叠方向')
+      const { layout } = this
+      let leftPane = resizer.previousElementSibling as HTMLElement
+      let rightPane = resizer.nextElementSibling as HTMLElement
+
+      const resizerClassList = resizer.parentElement?.classList
+      if (resizerClassList && resizerClassList.contains('layout-h')) {
+        console.log('水平')
+        leftPane.style.height = 2 + 'px'
+        // const { top, height } = leftPane.getBoundingClientRect()
+        // resizer.style.top = top + height + 'px'
+        // Array.from(leftPane.childNodes).forEach(o => {
+        //   ;(o as HTMLElement).style.display = 'none'
+        // })
+      }
+      if (resizerClassList && resizerClassList.contains('layout-v')) {
+        if (direction === 'left') {
+          resizer.classList.add('resizer-rotate')
+          const leftOriginalWidth = leftPane.style.width
+          const rightOriginalWidth = rightPane.style.width
+          const { width: leftPaneWidth } = leftPane.getBoundingClientRect()
+          const { width: rightPaneWidth } = rightPane.getBoundingClientRect()
+          leftPane.style.width = 4 + 'px'
+          leftPane.dataset.fold = 'fold'
+          leftPane.dataset.direction = 'left'
+          leftPane.dataset.originalWidth = leftOriginalWidth
+
+          rightPane.style.width = leftPaneWidth + rightPaneWidth - 4 + 'px'
+          rightPane.dataset.originalWidth = rightOriginalWidth
+
+          Array.from(leftPane.childNodes).forEach(o => {
+            ;(o as HTMLElement).style.display = 'none'
+          })
+        }
+        if (direction === 'right') {
+          console.log('展开')
+          console.log(leftPane.dataset.originalWidth, '---')
+          leftPane.style.width = leftPane.dataset.originalWidth as string
+          rightPane.style.width = rightPane.dataset.originalWidth as string
+          Array.from(leftPane.childNodes).forEach(o => {
+            ;(o as HTMLElement).style.display = 'block'
+          })
+        }
+      }
+
+      this.$nextTick(() => {
+        this.initLayout(true)
+      })
+    })
   }
   beforeDestory() {
     window.removeEventListener('resize', () => this.initLayout(true))
