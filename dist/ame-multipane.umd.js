@@ -643,13 +643,6 @@ exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDes
 
 /***/ }),
 
-/***/ "5d10":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/icon_right.5078683e.svg";
-
-/***/ }),
-
 /***/ "5e2f":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1110,6 +1103,13 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ "823d":
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAgCAYAAAArBentAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAACqADAAQAAAABAAAAIAAAAACwCY9QAAABO0lEQVQ4EWOYMXvVQSB2ZSAAGGfMWvUfquYUA9P/loyU8M3Y9CArhMlfZPzP2Pr8+dW1DQ0N/2CC2BSC5RgZGK7/Z/zfJsTPuDwsLOwvToVwkxgY7vz/xxTJBBPARQM9oMLI9G85QYUgA0CKiVIIUjxkFbKzszHo66mD/AAHLHAWlMHBwc7g42XH8PHjFxQpFF9zcXEw+Pk6MAgLC6AoAnHgJvLwcDH4eNsz8PPxYCgCCaCYiFUFVBCu8MuXbwybNu9neP/hE1b1cIUg2W/ffgAVH2B4+/YDhmIUhSDZHz9+MmzeepDh1et3KIoxFIJkf/78xXDx0k3CClFUQDlYTRyKCoFZ9w5Bz4AUgbIrPFFg8ekNYO5rExJgWBYWFvIXm0KsRQqyQryFFAsDI8MhoLUtGalhu7FYDxcCAFUvZjLedUWiAAAAAElFTkSuQmCC"
+
+/***/ }),
+
 /***/ "8391":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1201,13 +1201,6 @@ module.exports = DESCRIPTORS ? function (object, key, value) {
   return object;
 };
 
-
-/***/ }),
-
-/***/ "90a4":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/icon_left.b726f986.svg";
 
 /***/ }),
 
@@ -3007,9 +3000,9 @@ let multipane_default_1 = class default_1 extends external_vue_default.a {
             }
           } else {
             if (isV) {
-              element.style.width = `calc(${element.style.width} - ${this.resizerWidth}px)`;
+              element.style.width = `calc(${element.style.width} - ${this.resizerWidth * 2}px)`;
             } else {
-              element.style.height = `calc(${element.style.height} - ${this.resizerWidth}px)`;
+              element.style.height = `calc(${element.style.height} - ${this.resizerWidth * 2}px)`;
             }
           }
         }
@@ -3252,8 +3245,8 @@ let resizer_default_1 = class default_1 extends external_vue_default.a {
       width: 0,
       height: 0
     });
-    _defineProperty(this, "leftIcon", __webpack_require__("90a4"));
-    _defineProperty(this, "rightIcon", __webpack_require__("5d10"));
+    _defineProperty(this, "leftIcon", __webpack_require__("823d"));
+    _defineProperty(this, "rightIcon", __webpack_require__("dcdb"));
     _defineProperty(this, "direction", 'left');
   }
   onLeftClick() {
@@ -3269,12 +3262,11 @@ let resizer_default_1 = class default_1 extends external_vue_default.a {
       "class": "multipane-resizer"
     }, [h("div", {
       "class": "multipane-resizer__opera"
-    }, [this.opera === 'left' && h("inline-svg", {
+    }, [this.opera === 'left' && h("el-image", {
       "class": "multipane-resizer-expand--left",
+      "style": "width: 10px; height: 32px",
       "attrs": {
-        "src": this.direction === 'left' ? this.leftIcon : this.rightIcon,
-        "width": "8",
-        "height": "32"
+        "src": this.direction === 'left' ? this.leftIcon : this.rightIcon
       },
       "on": {
         "click": this.onLeftClick
@@ -3282,7 +3274,7 @@ let resizer_default_1 = class default_1 extends external_vue_default.a {
     }), this.opera === 'right' && h("inline-svg", {
       "class": "multipane-resizer-expand--right",
       "attrs": {
-        "src": __webpack_require__("5d10"),
+        "src": __webpack_require__("dcdb"),
         "width": "8",
         "height": "32"
       },
@@ -3495,6 +3487,13 @@ module.exports = function (key) {
   return keys[key] || (keys[key] = uid(key));
 };
 
+
+/***/ }),
+
+/***/ "dcdb":
+/***/ (function(module, exports) {
+
+module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAgCAYAAAArBentAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAACqADAAQAAAABAAAAIAAAAACwCY9QAAABJ0lEQVQ4EWNkIABmzF7lClRSw4hL3Yw5K30Z/jHWAOXNQGpQFDY0NDBJSmoH/2f8Xw2U0wcpgAGwwlWrVjG/+/g/kvE/Y9V/BgZNmCQyzThjxhoTRqZ/y4EKVJAl0NlMxCgCaWIiZBLMZCYYgxA95BTq66kzsLOzYfUXimfERIUYfL3tGTg42DEUoygEyQoLCzD4+TowcHFxoCjGUAiSFRTgAyp2ZODh4YIrxqoQLovEYEFiw5nvP3xi2LL1IMO3bz/gYhgK3779wLBl2yGGHz9+whWBGCgKX71+x3DoyFmGnz9/oSjCUHjx0k0MBTABoj0zJBQC8+sdmM/w0Uz//zFFEqMYXgAAIyQKyKkCmqqBzWSwQpgEwSIFphCZxltIISuEsWHFHgChhU7SWaH6IwAAAABJRU5ErkJggg=="
 
 /***/ }),
 

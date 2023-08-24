@@ -84,9 +84,9 @@ export default class extends Vue {
             }
           } else {
             if (isV) {
-              element.style.width = `calc(${element.style.width} - ${this.resizerWidth}px)`
+              element.style.width = `calc(${element.style.width} - ${this.resizerWidth * 2}px)`
             } else {
-              element.style.height = `calc(${element.style.height} - ${this.resizerWidth}px)`
+              element.style.height = `calc(${element.style.height} - ${this.resizerWidth * 2}px)`
             }
           }
         }

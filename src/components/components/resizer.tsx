@@ -16,8 +16,8 @@ export default class extends Vue {
     height: 0
   }
 
-  leftIcon = require('@/components/icons/icon_left.svg')
-  rightIcon = require('@/components/icons/icon_right.svg')
+  leftIcon = require('@/components/icons/icon_left.png')
+  rightIcon = require('@/components/icons/icon_right.png')
 
   direction = 'left'
 
@@ -39,18 +39,18 @@ export default class extends Vue {
       <div class="multipane-resizer">
         <div class="multipane-resizer__opera">
           {this.opera === 'left' && (
-            <inline-svg
+            <el-image
               class="multipane-resizer-expand--left"
+              style="width: 10px; height: 32px"
               src={this.direction === 'left' ? this.leftIcon : this.rightIcon}
-              width="8"
-              height="32"
               onClick={this.onLeftClick}
-            ></inline-svg>
+            ></el-image>
           )}
+
           {this.opera === 'right' && (
             <inline-svg
               class="multipane-resizer-expand--right"
-              src={require('@/components/icons/icon_right.svg')}
+              src={require('@/components/icons/icon_right.png')}
               width="8"
               height="32"
               onClick={this.onRightClick}
