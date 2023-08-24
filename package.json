@@ -1,7 +1,7 @@
 {
   "name": "ame-multipane",
-  "version": "1.4.0",
-  "main": "dist/el-table-ts.common.js",
+  "version": "0.0.1",
+  "main": "dist/ame-multipane.common.js",
   "typings": "types/index.d.ts",
   "private": false,
   "author": "ame",
@@ -9,7 +9,7 @@
     "serve": "vue-cli-service serve",
     "mock": "npm run ./mock/index.ts",
     "test:unit": "jest --clearCache && vue-cli-service test:unit",
-    "build": "vue-cli-service build --target lib --name el-table-ts ./src/components/index.ts"
+    "build": "vue-cli-service build --target lib --name ame-multipane ./src/components/index.ts"
   },
   "dependencies": {
     "await-to-js": "^3.0.0",
