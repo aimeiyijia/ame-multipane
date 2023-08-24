@@ -94,11 +94,17 @@ export default class extends Vue {
         if (leftResizer) {
           let prePane = leftResizer.previousElementSibling as HTMLElement
           if (isV) {
-            const { left, width } = prePane.getBoundingClientRect()
-            element.style.left = left + width + this.resizerWidth * 2 + 'px'
+            element.style.left =
+              prePane.offsetLeft +
+              prePane.offsetWidth +
+              this.resizerWidth * 2 +
+              'px'
           } else {
-            const { top, height } = prePane.getBoundingClientRect()
-            element.style.top = top + height + this.resizerWidth * 2 + 'px'
+            element.style.top =
+              prePane.offsetTop +
+              prePane.offsetHeight +
+              this.resizerWidth * 2 +
+              'px'
           }
         }
       }
@@ -129,12 +135,10 @@ export default class extends Vue {
         //   console.log('只有右paner的分割线')
         // }
         if (isV) {
-          const { left, width } = prePane.getBoundingClientRect()
-          element.style.left = left + width + 'px'
+          element.style.left = prePane.offsetLeft + prePane.offsetWidth + 'px'
         } else {
-          const { top, height } = prePane.getBoundingClientRect()
           console.log(prePane.offsetHeight)
-          element.style.top = top + height + 'px'
+          element.style.top = prePane.offsetTop + prePane.offsetHeight + 'px'
         }
       }
     }
@@ -180,7 +184,8 @@ export default class extends Vue {
             ? (initPrePaneWidth / containerWidth) * 100 + '%'
             : initPrePaneWidth + 'px'
 
-          const { left, width } = prePane.getBoundingClientRect()
+          const left = prePane.offsetLeft
+          const width = prePane.offsetWidth
           resizer.style.left = left + width + 'px'
 
           nextPane.style.width = nextPaneWidthUsePercentage
@@ -199,7 +204,8 @@ export default class extends Vue {
             ? (initPrePaneHeight / containerHeight) * 100 + '%'
             : initPrePaneHeight + 'px'
 
-          const { top, height } = prePane.getBoundingClientRect()
+          const top = prePane.offsetTop
+          const height = prePane.offsetHeight
           resizer.style.top = top + height + 'px'
 
           nextPane.style.height = nextPaneHeightUsePercentage
@@ -279,8 +285,8 @@ export default class extends Vue {
           resizer.classList.add('resizer-rotate')
           const leftOriginalWidth = leftPane.style.width
           const rightOriginalWidth = rightPane.style.width
-          const { width: leftPaneWidth } = leftPane.getBoundingClientRect()
-          const { width: rightPaneWidth } = rightPane.getBoundingClientRect()
+          const leftPaneWidth = leftPane.offsetWidth
+          const rightPaneWidth = rightPane.offsetWidth
           leftPane.style.width = 4 + 'px'
           leftPane.dataset.fold = 'fold'
           leftPane.dataset.direction = 'left'
