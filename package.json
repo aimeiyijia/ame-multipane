@@ -1,6 +1,6 @@
 {
   "name": "ame-multipane",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "dist/ame-multipane.common.js",
   "typings": "types/index.d.ts",
   "private": false,

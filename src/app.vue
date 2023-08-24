@@ -39,9 +39,6 @@ body,
   height: 100%;
   width: 100%;
 }
-body {
-  overflow: hidden;
-}
 .layout-v > .pane {
   width: 50%;
 }
