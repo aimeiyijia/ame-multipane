@@ -1,15 +1,15 @@
 <template>
   <div id="app">
     <multipane class="custom-resizer" layout="vertical">
-      <paner :style="{ width: '30%' }">
+      <paner :paner-style="{ width: '40%' }">
         <div class="pane pane1">第一个面板</div>
       </paner>
       <resizer opera="left"></resizer>
-      <paner :style="{ width: '30%' }">
+      <paner :paner-style="{ width: '20%' }">
         <div class="pane pane2">第二个面板</div>
       </paner>
       <resizer opera="right"></resizer>
-      <paner :style="{ width: '40%' }">
+      <paner :paner-style="{ width: '40%' }">
         <multipane class="custom-resizer" layout="horizontal">
           <paner :style="{ height: '40%' }">
             <div class="pane pane3">垂直第一个面板</div>

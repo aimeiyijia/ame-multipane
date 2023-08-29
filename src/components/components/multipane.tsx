@@ -97,18 +97,20 @@ export default class extends Vue {
 
         if (leftResizer) {
           let prePane = leftResizer.previousElementSibling as HTMLElement
-          if (isV) {
-            element.style.left =
-              prePane.offsetLeft +
-              prePane.offsetWidth +
-              this.resizerWidth * 2 +
-              'px'
-          } else {
-            element.style.top =
-              prePane.offsetTop +
-              prePane.offsetHeight +
-              this.resizerWidth * 2 +
-              'px'
+          if (prePane) {
+            if (isV) {
+              element.style.left =
+                prePane.offsetLeft +
+                prePane.offsetWidth +
+                this.resizerWidth * 2 +
+                'px'
+            } else {
+              element.style.top =
+                prePane.offsetTop +
+                prePane.offsetHeight +
+                this.resizerWidth * 2 +
+                'px'
+            }
           }
         }
       }
