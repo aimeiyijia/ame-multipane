@@ -298,7 +298,13 @@ export default class extends Vue {
           leftPane.dataset.direction = 'left'
           leftPane.dataset.originalWidth = leftOriginalWidth
 
-          rightPane.style.width = leftPaneWidth + rightPaneWidth - 4 + 'px'
+          console.log(leftOriginalWidth, 'leftOriginalWidth')
+          console.log(rightOriginalWidth, 'rightOriginalWidth')
+          console.log(
+            `calc(${leftOriginalWidth} + ${rightOriginalWidth}) - 4px`,
+            'rightOriginalWidth'
+          )
+          rightPane.style.width = `calc(${leftOriginalWidth} + ${rightOriginalWidth} - 4px)`
           rightPane.dataset.originalWidth = rightOriginalWidth
 
           Array.from(leftPane.childNodes).forEach(o => {
