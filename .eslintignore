@@ -1,4 +1,5 @@
-dist/*.js
-src/assets
-tests/unit/coverage
-public/**/*.js
+dist
+node_modules
+!.prettierrc.js
+components.d.ts
+auto-imports.d.ts

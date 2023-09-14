@@ -1,65 +1,52 @@
 <template>
-  <div id="app">
-    <multipane class="custom-resizer" layout="vertical">
-      <paner :paner-style="{ width: '40%' }">
-        <div class="pane pane1">第一个面板</div>
-      </paner>
-      <resizer opera="left"></resizer>
-      <paner :paner-style="{ width: '20%' }">
-        <div class="pane pane2">第二个面板</div>
-      </paner>
-      <resizer opera="right"></resizer>
-      <paner :paner-style="{ width: '40%' }">
-        <multipane class="custom-resizer" layout="horizontal">
-          <paner :style="{ height: '40%' }">
-            <div class="pane pane3">垂直第一个面板</div>
-          </paner>
-          <resizer opera="left"></resizer>
-          <paner :style="{ height: '60%' }">
-            <div class="pane pane4">垂直第二个面板</div>
-          </paner>
-        </multipane>
-      </paner>
-    </multipane>
-  </div>
+  <splitpanes class="default-theme">
+    <pane min-size="20">横 1</pane>
+    <pane min-size="20">横 2</pane>
+    <pane>
+      <splitpanes horizontal>
+        <pane>竖 3</pane>
+        <pane>竖 4</pane>
+        <pane>竖 5</pane>
+      </splitpanes>
+    </pane>
+    <pane>横 6</pane>
+  </splitpanes>
 </template>
 
-<script type="ts">
-import Vue, { VNode, CreateElement } from 'vue'
-import { Component, Prop, Emit, Watch } from 'vue-property-decorator'
-@Component({
-  name: 'App',
-})
-export default class extends Vue {}
+<script>
+import { Splitpanes, Pane } from '@/components/index'
+
+export default {
+  components: { Splitpanes, Pane },
+  directives: {
+    scroll: {
+      inserted: (el, binding) => {
+        const f = (evt) => {
+          if (binding.value(evt, el)) window.removeEventListener('scroll', f)
+        }
+        window.addEventListener('scroll', f)
+      }
+    }
+  },
+  data: () => ({
+    offsetTop: 0,
+    goTopHidden: true
+  }),
+  methods: {
+    onScroll() {
+      this.offsetTop = window.pageYOffset || document.documentElement.scrollTop
+      this.goTopHidden = this.offsetTop < 200
+    },
+    scrollToTop() {
+      document.documentElement.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+}
 </script>
 <style lang="scss">
 html,
-body,
-#app {
-  height: 100%;
-  width: 100%;
-}
-.layout-v > .pane {
-  width: 50%;
-}
-.layout-h > .pane {
-  height: 200px;
-}
-.pane {
-  font-size: 36px;
+body {
   width: 100%;
   height: 100%;
 }
-/* .pane1 {
-  background-color: aquamarine;
-}
-.pane2 {
-  background-color: bisque;
-}
-.pane3 {
-  background-color: chocolate;
-}
-.pane4 {
-  background-color: rgb(148, 196, 255);
-} */
 </style>

@@ -1,22 +1,35 @@
-.DS_Store
-node_modules
-
-# local env files
-.env.local
-.env.*.local
-
-# Log files
+# Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+*.vscode
+*.husky
+.history
+
+/cypress/videos/
+/cypress/screenshots/
 
 # Editor directories and files
 .idea
-.vscode
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-/.history
-/coverage
+
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+components.d.ts
+auto-imports.d.ts
