@@ -2,6 +2,7 @@
   <splitpanes
     class="default-theme"
     :fold="true"
+    :direction="false"
     @fold-to-left="handleFoldLeft"
     @fold-to-right="handleFoldRight"
     @resize="handleResize"
@@ -58,7 +59,6 @@ export default {
     handleSplitter(left, right) {
       // this.size = 20
       console.log('splitter left：', left)
-      left.size = '15'
       console.log('splitter right：', right)
     },
     handleFoldLeft() {},

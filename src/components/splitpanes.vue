@@ -871,6 +871,8 @@ export default {
     &::after {
       background-color: transparent;
       background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
       cursor: pointer;
     }
     &::before {
@@ -903,21 +905,28 @@ export default {
       height: 30px;
       transform: translateY(-50%);
     }
-
-    &.splitpanes__splitter-fold {
-      &::before,
-      &::after {
-        width: 10px;
-        height: 32px;
-      }
-    }
-
     &::before {
       margin-left: -2px;
     }
 
     &::after {
       margin-left: 1px;
+    }
+
+    &.splitpanes__splitter-fold {
+      &::before,
+      &::after {
+        width: 6px;
+        height: 20px;
+      }
+
+      &::before {
+        margin-left: -6px;
+      }
+
+      &::after {
+        margin-left: 1px;
+      }
     }
   }
 
