@@ -12,8 +12,9 @@ export default {
   },
   props: {
     horizontal: { type: Boolean },
-    pushOtherPanes: { type: Boolean, default: true },
-    dblClickSplitter: { type: Boolean, default: true },
+    fold: { type: Boolean, default: false },
+    pushOtherPanes: { type: Boolean, default: false },
+    dblClickSplitter: { type: Boolean, default: false },
     rtl: { type: Boolean, default: false }, // Right to left direction.
     firstSplitter: { type: Boolean }
   },
@@ -173,19 +174,19 @@ export default {
     },
 
     // If touch device, detect double tap manually (2 taps separated by less than 500ms).
-    onSplitterClick(event, splitterIndex) {
+    onSplitterClick(event, splitterIndex, splitterNextIndex) {
       if ('ontouchstart' in window) {
         event.preventDefault()
 
         // Detect splitter double taps if the option is on.
         if (this.dblClickSplitter) {
-          if (this.splitterTaps.splitter === splitterIndex) {
+          if (this.splitterTaps.splitter === splitterNextIndex) {
             clearTimeout(this.splitterTaps.timeoutId)
             this.splitterTaps.timeoutId = null
-            this.onSplitterDblClick(event, splitterIndex)
+            this.onSplitterDblClick(event, splitterNextIndex)
             this.splitterTaps.splitter = null // Reset for the next tap check.
           } else {
-            this.splitterTaps.splitter = splitterIndex
+            this.splitterTaps.splitter = splitterNextIndex
             this.splitterTaps.timeoutId = setTimeout(() => {
               this.splitterTaps.splitter = null
             }, 500)
@@ -193,7 +194,7 @@ export default {
         }
       }
 
-      if (!this.touch.dragging) this.$emit('splitter-click', this.panes[splitterIndex])
+      if (!this.touch.dragging) this.$emit('splitter-click', this.panes[splitterIndex], this.panes[splitterNextIndex])
     },
 
     // On splitter dbl click or dbl tap maximize this pane.
@@ -408,6 +409,9 @@ export default {
       const splitterIndex = paneIndex - 1
       const elm = document.createElement('div')
       elm.classList.add('splitpanes__splitter')
+      if (this.fold) {
+        elm.classList.add('splitpanes__splitter-fold')
+      }
 
       if (!isVeryFirst) {
         elm.onmousedown = (event) => this.onMouseDown(event, splitterIndex)
@@ -415,7 +419,7 @@ export default {
         if (typeof window !== 'undefined' && 'ontouchstart' in window) {
           elm.ontouchstart = (event) => this.onMouseDown(event, splitterIndex)
         }
-        elm.onclick = (event) => this.onSplitterClick(event, splitterIndex + 1)
+        elm.onclick = (event) => this.onSplitterClick(event, splitterIndex, splitterIndex + 1)
       }
 
       if (this.dblClickSplitter) {
@@ -861,6 +865,25 @@ export default {
       cursor: auto;
     }
   }
+
+  .splitpanes__splitter-fold {
+    &::before,
+    &::after {
+      background-color: transparent;
+      background-repeat: no-repeat;
+      cursor: pointer;
+    }
+    &::before {
+      background-image: url('./icons/icon_left.png');
+    }
+    &::after {
+      background-image: url('./icons/icon_right.png');
+    }
+    &:hover::before,
+    &:hover::after {
+      background-color: transparent;
+    }
+  }
 }
 
 .default-theme {
@@ -879,6 +902,14 @@ export default {
       width: 1px;
       height: 30px;
       transform: translateY(-50%);
+    }
+
+    &.splitpanes__splitter-fold {
+      &::before,
+      &::after {
+        width: 10px;
+        height: 32px;
+      }
     }
 
     &::before {

@@ -1,7 +1,15 @@
 <template>
-  <splitpanes class="default-theme">
-    <pane min-size="20">横 1</pane>
-    <pane min-size="20">横 2</pane>
+  <splitpanes
+    class="default-theme"
+    :fold="true"
+    @fold-to-left="handleFoldLeft"
+    @fold-to-right="handleFoldRight"
+    @resize="handleResize"
+    @resized="handleResized"
+    @splitter-click="handleSplitter"
+  >
+    <pane :size="size">横 1</pane>
+    <pane size="20">横 2</pane>
     <pane>
       <splitpanes horizontal>
         <pane>竖 3</pane>
@@ -30,7 +38,8 @@ export default {
   },
   data: () => ({
     offsetTop: 0,
-    goTopHidden: true
+    goTopHidden: true,
+    size: 10
   }),
   methods: {
     onScroll() {
@@ -39,7 +48,21 @@ export default {
     },
     scrollToTop() {
       document.documentElement.scrollTo({ top: 0, behavior: 'smooth' })
-    }
+    },
+    handleResize(e) {
+      // console.log('resize：', e)
+    },
+    handleResized(e) {
+      console.log('resized：', e)
+    },
+    handleSplitter(left, right) {
+      // this.size = 20
+      console.log('splitter left：', left)
+      left.size = '15'
+      console.log('splitter right：', right)
+    },
+    handleFoldLeft() {},
+    handleFoldRight() {}
   }
 }
 </script>
