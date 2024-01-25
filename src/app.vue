@@ -7,16 +7,15 @@
     @resized="handleResized"
     @splitter-click="handleSplitter"
   >
-    <pane :size="size" :fold-to-left="true" :fold-to-right="true">横 1</pane>
-    <pane size="20" :fold-to-left="true" :fold-to-right="true">横 2</pane>
-    <pane>
+    <pane size="25" :fold-to-left="true" :fold-to-right="true">横 1</pane>
+    <pane size="25" :fold-to-left="true" :fold-to-right="true">横 2</pane>
+    <pane size="50" :fold-to-left="true" :fold-to-right="true">
       <splitpanes horizontal>
         <pane>竖 3</pane>
         <pane :fold-to-left="true" :fold-to-right="true">竖 4</pane>
         <pane>竖 5</pane>
       </splitpanes>
     </pane>
-    <pane>横 6</pane>
   </splitpanes>
 </template>
 

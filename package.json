@@ -1,20 +1,20 @@
 {
-  "name": "vite-vue2-js-starter-template",
-  "description": "Vue2 JavaScript Starter Project For Vite.",
+  "name": "ame-multipane",
+  "description": "ame-multipane",
   "version": "0.0.0",
   "license": "MIT",
   "author": {
-    "name": "ElanYoung",
-    "email": "william@starimmortal.com",
-    "url": "https://doc.starimmortal.com"
+    "name": "ame",
+    "email": "1456723200@qq.com",
+    "url": "https://ame.cool"
   },
-  "homepage": "https://elanyoung.github.io/vite-vue2-js-starter-template",
+  "homepage": "https://github.com/aimeiyijia/ame-multipane.git",
   "repository": {
     "type": "git",
-    "url": "git@github.com:ElanYoung/vite-vue2-js-template-starter.git"
+    "url": "git@github.com:aimeiyijia/ame-multipane.git"
   },
   "bugs": {
-    "url": "https://github.com/ElanYoung/vite-vue2-js-starter-template/issues"
+    "url": "https://github.com/aimeiyijia/ame-multipane.git/issues"
   },
   "scripts": {
     "dev": "vite",

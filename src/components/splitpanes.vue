@@ -407,8 +407,8 @@ export default {
 
     addSplitter(paneIndex, nextPaneNode, isVeryFirst = false) {
       const splitterIndex = paneIndex - 1
-      console.log(this.panes[splitterIndex], '左面板')
-      console.log(this.panes[paneIndex], '右面板')
+      // console.log(this.panes[splitterIndex], '左面板')
+      // console.log(this.panes[paneIndex], '右面板')
       const { toLeft: leftPaneToLeft, toRight: leftPaneToRight } = this.panes[splitterIndex]
       const { toLeft: rightPaneToLeft, toRight: rightPaneToRight } = this.panes[paneIndex]
       const elm = document.createElement('div')
@@ -420,14 +420,25 @@ export default {
       if (leftPaneToRight) {
         foldLeftIcon.classList.add('splitpanes__splitter-fold--left')
         foldLeftIcon.onclick = () => {
-          if (this.panes[paneIndex].size === 0) {
+          if (this.panes[splitterIndex].foldLeft && this.panes[paneIndex].foldLeft) return
+          if (this.panes[paneIndex].size === 1) {
             this.panes[paneIndex].size = this.panes[paneIndex].prevSize
             this.panes[splitterIndex].size = this.panes[splitterIndex].prevSize
+
+            this.panes[splitterIndex].foldLeft = false
+            this.panes[paneIndex].foldLeft = false
+            this.panes[splitterIndex].foldRight = false
+            this.panes[paneIndex].foldRight = false
           } else {
             this.panes[splitterIndex].prevSize = this.panes[splitterIndex].size
             this.panes[paneIndex].prevSize = this.panes[paneIndex].size
-            this.panes[paneIndex].size += this.panes[splitterIndex].size
-            this.panes[splitterIndex].size = 0
+            this.panes[paneIndex].size += this.panes[splitterIndex].size - 1
+            this.panes[splitterIndex].size = 1
+
+            this.panes[splitterIndex].foldLeft = true
+            this.panes[paneIndex].foldLeft = true
+            this.panes[splitterIndex].foldRight = false
+            this.panes[paneIndex].foldRight = false
           }
           this.$emit('fold-to-left', {
             leftPane: this.panes[splitterIndex],
@@ -439,16 +450,29 @@ export default {
       if (rightPaneToLeft) {
         foldRightIcon.classList.add('splitpanes__splitter-fold--right')
         foldRightIcon.onclick = () => {
-          if (this.panes[splitterIndex].size === 0) {
+          if (this.panes[splitterIndex].foldRight && this.panes[paneIndex].foldRight) return
+          console.log(this.panes[splitterIndex].size, '左面板')
+          console.log(this.panes[paneIndex].size, '右面板')
+          if (this.panes[splitterIndex].size === 1) {
             this.panes[paneIndex].size = this.panes[paneIndex].prevSize
             this.panes[splitterIndex].size = this.panes[splitterIndex].prevSize
+
+            this.panes[splitterIndex].foldLeft = false
+            this.panes[paneIndex].foldLeft = false
+            this.panes[splitterIndex].foldRight = false
+            this.panes[paneIndex].foldRight = false
           } else {
             const leftPaneSize = this.panes[splitterIndex].size
             const rightPaneSize = this.panes[paneIndex].size
             this.panes[splitterIndex].prevSize = this.panes[splitterIndex].size
             this.panes[paneIndex].prevSize = this.panes[paneIndex].size
-            this.panes[splitterIndex].size = leftPaneSize + rightPaneSize
-            this.panes[paneIndex].size = 0
+            this.panes[splitterIndex].size = leftPaneSize + rightPaneSize - 1
+            this.panes[paneIndex].size = 1
+
+            this.panes[splitterIndex].foldLeft = false
+            this.panes[paneIndex].foldLeft = false
+            this.panes[splitterIndex].foldRight = true
+            this.panes[paneIndex].foldRight = true
           }
         }
         this.$emit('fold-to-right', {
