@@ -1,4 +1,12 @@
-import Splitpanes from './splitpanes.vue'
+import SplitPanes from './splitpanes.vue'
 import Pane from './pane.vue'
 
-export { Splitpanes, Pane }
+const Splitpanes = {
+  install(Vue) {
+    Vue.component(SplitPanes.name, SplitPanes)
+    Vue.component(Pane.name, Pane)
+  }
+}
+
+export default Splitpanes
+export { SplitPanes, Pane }
