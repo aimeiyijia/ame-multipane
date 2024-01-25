@@ -407,11 +407,60 @@ export default {
 
     addSplitter(paneIndex, nextPaneNode, isVeryFirst = false) {
       const splitterIndex = paneIndex - 1
+      console.log(this.panes[splitterIndex], '左面板')
+      console.log(this.panes[paneIndex], '右面板')
+      const { toLeft: leftPaneToLeft, toRight: leftPaneToRight } = this.panes[splitterIndex]
+      const { toLeft: rightPaneToLeft, toRight: rightPaneToRight } = this.panes[paneIndex]
       const elm = document.createElement('div')
       elm.classList.add('splitpanes__splitter')
-      if (this.fold) {
-        elm.classList.add('splitpanes__splitter-fold')
+
+      const foldContainer = document.createElement('div')
+      const foldLeftIcon = document.createElement('span')
+      const foldRightIcon = document.createElement('span')
+      if (leftPaneToRight) {
+        foldLeftIcon.classList.add('splitpanes__splitter-fold--left')
+        foldLeftIcon.onclick = () => {
+          if (this.panes[paneIndex].size === 0) {
+            this.panes[paneIndex].size = this.panes[paneIndex].prevSize
+            this.panes[splitterIndex].size = this.panes[splitterIndex].prevSize
+          } else {
+            this.panes[splitterIndex].prevSize = this.panes[splitterIndex].size
+            this.panes[paneIndex].prevSize = this.panes[paneIndex].size
+            this.panes[paneIndex].size += this.panes[splitterIndex].size
+            this.panes[splitterIndex].size = 0
+          }
+          this.$emit('fold-to-left', {
+            leftPane: this.panes[splitterIndex],
+            rightPane: this.panes[paneIndex],
+            panes: this.panes
+          })
+        }
       }
+      if (rightPaneToLeft) {
+        foldRightIcon.classList.add('splitpanes__splitter-fold--right')
+        foldRightIcon.onclick = () => {
+          if (this.panes[splitterIndex].size === 0) {
+            this.panes[paneIndex].size = this.panes[paneIndex].prevSize
+            this.panes[splitterIndex].size = this.panes[splitterIndex].prevSize
+          } else {
+            const leftPaneSize = this.panes[splitterIndex].size
+            const rightPaneSize = this.panes[paneIndex].size
+            this.panes[splitterIndex].prevSize = this.panes[splitterIndex].size
+            this.panes[paneIndex].prevSize = this.panes[paneIndex].size
+            this.panes[splitterIndex].size = leftPaneSize + rightPaneSize
+            this.panes[paneIndex].size = 0
+          }
+        }
+        this.$emit('fold-to-right', {
+          leftPane: this.panes[splitterIndex],
+          rightPane: this.panes[paneIndex],
+          panes: this.panes
+        })
+      }
+      foldContainer.classList.add('splitpanes__splitter-fold')
+      foldContainer.appendChild(foldLeftIcon)
+      foldContainer.appendChild(foldRightIcon)
+      elm.appendChild(foldContainer)
 
       if (!isVeryFirst) {
         elm.onmousedown = (event) => this.onMouseDown(event, splitterIndex)
@@ -474,8 +523,11 @@ export default {
         index,
         min: Number.isNaN(min) ? 0 : min,
         max: Number.isNaN(max) ? 100 : max,
+        prevSize: pane.prevSize,
         size: pane.size === null ? null : parseFloat(pane.size),
         givenSize: pane.size,
+        toLeft: pane.foldToLeft,
+        toRight: pane.foldToRight,
         update: pane.update
       })
 
@@ -825,65 +877,54 @@ export default {
   }
 
   &--vertical > .splitpanes__splitter {
-    min-width: 1px;
+    min-width: 1.5px;
     cursor: col-resize;
   }
 
   &--horizontal > .splitpanes__splitter {
-    min-height: 1px;
+    min-height: 1.5px;
     cursor: row-resize;
   }
 }
 
 .splitpanes.default-theme {
   .splitpanes__pane {
-    background-color: #f2f2f2;
+    background-color: #fff;
   }
 
   .splitpanes__splitter {
     position: relative;
     box-sizing: border-box;
     flex-shrink: 0;
-    background-color: #fff;
-
-    &::before,
-    &::after {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      content: '';
-      background-color: rgb(0 0 0 / 15%);
-      transition: background-color 0.3s;
-    }
-
-    &:hover::before,
-    &:hover::after {
-      background-color: rgb(0 0 0 / 25%);
-    }
-
-    &:first-child {
-      cursor: auto;
-    }
+    background-color: #e4e4e4;
   }
 
   .splitpanes__splitter-fold {
-    &::before,
-    &::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .splitpanes__splitter-fold--left,
+    .splitpanes__splitter-fold--right {
+      display: inline-block;
+      flex: 0 0 49%;
+      height: 100%;
       background-color: transparent;
       background-repeat: no-repeat;
       background-position: center;
-      background-size: cover;
+      background-size: contain;
       cursor: pointer;
     }
-    &::before {
+    .splitpanes__splitter-fold--left {
       background-image: url('./icons/icon_left.png');
     }
-    &::after {
+    .splitpanes__splitter-fold--right {
       background-image: url('./icons/icon_right.png');
-    }
-    &:hover::before,
-    &:hover::after {
-      background-color: transparent;
     }
   }
 }
@@ -895,60 +936,27 @@ export default {
 
   &.splitpanes--vertical > .splitpanes__splitter,
   .splitpanes--vertical > .splitpanes__splitter {
-    width: 7px;
+    /* width: 7px;
     margin-left: -1px;
-    border-left: 1px solid #eee;
-
-    &::before,
-    &::after {
-      width: 1px;
-      height: 30px;
-      transform: translateY(-50%);
-    }
-    &::before {
-      margin-left: -2px;
-    }
-
-    &::after {
-      margin-left: 1px;
-    }
-
-    &.splitpanes__splitter-fold {
-      &::before,
-      &::after {
-        width: 6px;
-        height: 20px;
-      }
-
-      &::before {
-        margin-left: -6px;
-      }
-
-      &::after {
-        margin-left: 1px;
-      }
-    }
+    border-left: 1px solid #eee; */
   }
 
   &.splitpanes--horizontal > .splitpanes__splitter,
   .splitpanes--horizontal > .splitpanes__splitter {
-    height: 7px;
+    /* height: 7px;
     margin-top: -1px;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #eee; */
 
-    &::before,
-    &::after {
-      width: 30px;
-      height: 1px;
-      transform: translateX(-50%);
-    }
-
-    &::before {
-      margin-top: -2px;
-    }
-
-    &::after {
-      margin-top: 1px;
+    .splitpanes__splitter-fold {
+      transform: translate(-50%, -50%) rotateZ(90deg);
+      /* transform-origin: -7px 14px; */
+      .splitpanes__splitter-fold--left,
+      .splitpanes__splitter-fold--right {
+      }
+      .splitpanes__splitter-fold--left {
+      }
+      .splitpanes__splitter-fold--right {
+      }
     }
   }
 }

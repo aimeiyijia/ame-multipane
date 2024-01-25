@@ -1,20 +1,18 @@
 <template>
   <splitpanes
     class="default-theme"
-    :fold="true"
-    :direction="false"
     @fold-to-left="handleFoldLeft"
     @fold-to-right="handleFoldRight"
     @resize="handleResize"
     @resized="handleResized"
     @splitter-click="handleSplitter"
   >
-    <pane :size="size">横 1</pane>
-    <pane size="20">横 2</pane>
+    <pane :size="size" :fold-to-left="true" :fold-to-right="true">横 1</pane>
+    <pane size="20" :fold-to-left="true" :fold-to-right="true">横 2</pane>
     <pane>
       <splitpanes horizontal>
         <pane>竖 3</pane>
-        <pane>竖 4</pane>
+        <pane :fold-to-left="true" :fold-to-right="true">竖 4</pane>
         <pane>竖 5</pane>
       </splitpanes>
     </pane>
@@ -61,7 +59,9 @@ export default {
       console.log('splitter left：', left)
       console.log('splitter right：', right)
     },
-    handleFoldLeft() {},
+    handleFoldLeft(e) {
+      console.log(e, '向左折叠')
+    },
     handleFoldRight() {}
   }
 }

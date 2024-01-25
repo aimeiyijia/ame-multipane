@@ -11,8 +11,11 @@ export default {
 
   props: {
     size: { type: [Number, String], default: null },
+    prevSize: { type: [Number, String], default: null },
     minSize: { type: [Number, String], default: 0 },
-    maxSize: { type: [Number, String], default: 100 }
+    maxSize: { type: [Number, String], default: 100 },
+    foldToLeft: { type: Boolean, default: false },
+    foldToRight: { type: Boolean, default: false }
   },
 
   data: () => ({
